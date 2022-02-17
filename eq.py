@@ -11,7 +11,6 @@ def buildeq_system(users : int):
     return eq_system
 
 def solve(users : int, payments : list):
-    print(payments)
     payments    = np.array(payments).astype(np.float64)
     payments    -= sum(payments) / users
     solution    = np.linalg.pinv(buildeq_system(users)) @ payments
