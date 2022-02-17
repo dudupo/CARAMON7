@@ -56,13 +56,13 @@ def dump(house : House):
     
 def gitpull():
     if constants.GITENABLE:
-        system(f"git pull origin master")
+        system(f"git pull origin main")
 
 def gitpush():
     if constants.GITENABLE:
         system(f"git add {constants.HOUSENAME}.pkl")
         system(f"git commit -m test")
-        system(f"git commit push origin main")
+        system(f"git push origin main")
 
 def gitpushdecorator(func):
     def inner(*args, **kwards):
@@ -75,6 +75,12 @@ def gitpushdecorator(func):
 @loaddecorator
 def loadHouse(house):
     return house
+
+@gitpushdecorator
+def payment_commit(house):
+    house.payment_commit(\
+    Payment(float(command[2]), command[1], house.users[args.user]))
+    dump(house)
 
 if __name__ == "__main__":
 
@@ -93,9 +99,7 @@ if __name__ == "__main__":
 
     command = args.action.split()
     if command[0] == "pay":
-        house.payment_commit(\
-            Payment(float(command[2]), command[1], house.users[args.user]))
-        dump(house)
+        payment_commit(house)
     if command[0] == "print":
         print(house.status())
     
